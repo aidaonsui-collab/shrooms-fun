@@ -17,7 +17,7 @@ export function GameStats() {
   )
 
   const content = gameState?.data?.content
-  const fields = content?.dataType === "moveObject" ? content.fields : null
+  const fields = content?.dataType === "moveObject" ? (content.fields as Record<string, any>) : null
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
