@@ -4,7 +4,8 @@ module shrooms_token::shrooms_token {
     use sui::tx_context::TxContext;
     use sui::object::UID;
     use sui::transfer;
-    use sui::sui::SUI;  // Added SUI type import
+    use sui::sui::SUI;
+    use sui::clock::{Self, Clock}; // Added Clock for time-based harvesting
 
 
     // Error codes
@@ -33,7 +34,7 @@ module shrooms_token::shrooms_token {
         owner: address,
         mushrooms: u64,
         level: u64,
-        last_harvest_epoch: u64,
+        last_harvest_timestamp: u64, // Changed from epoch to timestamp
         created_at_epoch: u64,
     }
 
@@ -41,6 +42,8 @@ module shrooms_token::shrooms_token {
     const FARM_COST: u64 = 10_000_000_000; // 10 SUI
     const INITIAL_MUSHROOMS: u64 = 10;
     const UPGRADE_COST: u64 = 5_000_000_000; // 5 SUI
+    const MIN_HARVEST_INTERVAL_MS: u64 = 300000; // 5 minutes cooldown (300,000 ms)
+    const TOKENS_PER_MUSHROOM_PER_HOUR: u64 = 1_000_000; // 1 token per mushroom per hour
 
     /// Initialize the game and create the $SHROOMS token
     fun init(witness: SHROOMS_TOKEN, ctx: &mut TxContext) {
@@ -87,6 +90,7 @@ module shrooms_token::shrooms_token {
     public entry fun create_farm(
         game_state: &mut GameState,
         payment: Coin<SUI>,
+        clock: &Clock,
         ctx: &mut TxContext
     ) {
         assert!(coin::value(&payment) >= FARM_COST, ENotEnoughPayment);
@@ -99,7 +103,7 @@ module shrooms_token::shrooms_token {
             owner: tx_context::sender(ctx),
             mushrooms: INITIAL_MUSHROOMS,
             level: 1,
-            last_harvest_epoch: tx_context::epoch(ctx),
+            last_harvest_timestamp: clock::timestamp_ms(clock), // Use timestamp instead of epoch
             created_at_epoch: tx_context::epoch(ctx),
         };
 
@@ -111,34 +115,36 @@ module shrooms_token::shrooms_token {
     public entry fun harvest(
         game_state: &mut GameState,
         farm_id: u64,
+        clock: &Clock,
         ctx: &mut TxContext
     ) {
         let sender = tx_context::sender(ctx);
-        let current_epoch = tx_context::epoch(ctx);
+        let current_time = clock::timestamp_ms(clock);
         
         let farm_ref = vector::borrow_mut(&mut game_state.farms, farm_id);
         assert!(farm_ref.owner == sender, ENotAuthorized);
 
-        let epochs_passed = current_epoch - farm_ref.last_harvest_epoch;
-        assert!(epochs_passed > 0, ETooEarly);
+        let time_passed_ms = current_time - farm_ref.last_harvest_timestamp;
+        assert!(time_passed_ms >= MIN_HARVEST_INTERVAL_MS, ETooEarly); // Check 5 minute cooldown
 
         let yield_amount = calculate_yield(
             farm_ref.mushrooms,
-            epochs_passed,
+            time_passed_ms,
             farm_ref.level
         );
 
         let minted_coin = coin::mint(&mut game_state.treasury_cap, yield_amount, ctx);
         transfer::public_transfer(minted_coin, sender);
 
-        farm_ref.last_harvest_epoch = current_epoch;
+        farm_ref.last_harvest_timestamp = current_time; // Update timestamp
         game_state.total_shrooms_minted = game_state.total_shrooms_minted + yield_amount;
     }
 
-    /// Calculate yield based on mushrooms, epochs, and level
-    fun calculate_yield(mushrooms: u64, epochs: u64, level: u64): u64 {
-        let base_yield = mushrooms * epochs * level;
-        (base_yield * 5) / 100 // 0.05 multiplier
+    /// Calculate yield based on mushrooms, time passed, and level
+    fun calculate_yield(mushrooms: u64, time_ms: u64, level: u64): u64 {
+        let hours_passed = time_ms / 3600000; // Convert ms to hours
+        let base_yield = mushrooms * hours_passed * TOKENS_PER_MUSHROOM_PER_HOUR;
+        base_yield * level // Level acts as multiplier
     }
 
     /// Plant more mushrooms on a farm
@@ -186,7 +192,7 @@ module shrooms_token::shrooms_token {
     /// View functions
     public fun get_farm_info(game_state: &GameState, farm_id: u64): (address, u64, u64, u64, u64) {
         let farm = vector::borrow(&game_state.farms, farm_id);
-        (farm.owner, farm.mushrooms, farm.level, farm.last_harvest_epoch, farm.created_at_epoch)
+        (farm.owner, farm.mushrooms, farm.level, farm.last_harvest_timestamp, farm.created_at_epoch)
     }
 
     public fun get_game_stats(game_state: &GameState): (u64, u64, u64) {
