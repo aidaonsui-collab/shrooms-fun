@@ -3,8 +3,15 @@
 import { Sprout } from "lucide-react"
 import { ZkLoginButton } from "@/components/zklogin-button"
 import { ConnectButton } from "@mysten/dapp-kit"
+import { useState, useEffect } from "react"
 
 export function Header() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   return (
     <header className="border-b-4 border-primary bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -17,9 +24,9 @@ export function Header() {
             <p className="text-xs text-muted-foreground font-mono">Grow Magic Mushrooms on Sui</p>
           </div>
         </div>
-        <div className="flex items-center gap-3" suppressHydrationWarning>
+        <div className="flex items-center gap-3">
           <ZkLoginButton />
-          <ConnectButton />
+          {mounted && <ConnectButton />}
         </div>
       </div>
     </header>
