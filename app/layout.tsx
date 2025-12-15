@@ -35,8 +35,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${pressStart.className} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${pressStart.className} antialiased`} suppressHydrationWarning>
         <Providers>
           <ToastProvider>{children}</ToastProvider>
         </Providers>
