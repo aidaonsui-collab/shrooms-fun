@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Providers } from "./providers"
 import { ToastProvider } from "@/lib/simple-toast"
 import "./globals.css"
+import "@mysten/dapp-kit/dist/index.css";
 
 const pressStart = Press_Start_2P({
   weight: "400",

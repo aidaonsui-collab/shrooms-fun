@@ -1,6 +1,11 @@
 "use client"
 
-import { ConnectButton } from "@mysten/dapp-kit"
+import dynamic from "next/dynamic"
+
+const WalletConnectButton = dynamic(
+  () => import("@/components/wallet-connect-button").then((mod) => ({ default: mod.WalletConnectButton })),
+  { ssr: false },
+)
 
 interface HeroSectionProps {
   compact?: boolean
@@ -9,92 +14,68 @@ interface HeroSectionProps {
 export function HeroSection({ compact = false }: HeroSectionProps) {
   if (compact) {
     return (
-      <div className="bg-gradient-to-b from-background to-card/50 py-8 relative overflow-hidden border-b-4 border-primary">
-        <div className="absolute inset-0 pointer-events-none opacity-10">
-          <div className="absolute top-4 left-10 text-4xl animate-float">🍄</div>
-          <div className="absolute top-4 right-20 text-3xl animate-float" style={{ animationDelay: "1s" }}>
-            🍄
-          </div>
+      <div className="pt-28 pb-12 text-center bg-gradient-to-b from-purple-900/40 via-indigo-800/30 to-transparent">
+        <div className="flex justify-center mb-4">
+          <span className="text-5xl">🍄</span>
         </div>
-
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="text-6xl animate-float drop-shadow-[0_0_20px_rgba(168,85,247,0.6)]">🍄</div>
-            <div>
-              <h2 className="text-3xl font-black leading-tight">
-                <span className="text-primary drop-shadow-[0_2px_8px_rgba(0,255,0,0.5)]">GROW MAGIC</span>{" "}
-                <span className="text-secondary drop-shadow-[0_2px_8px_rgba(200,0,255,0.5)]">MUSHROOMS</span>
-              </h2>
-              <p className="text-xs text-muted-foreground">FARM • HARVEST • Get high on $SHROOMS</p>
-            </div>
-          </div>
-        </div>
+        <h1 className="text-5xl md:text-6xl font-bold pixelated mb-3">
+          <span className="text-emerald-400">GROW MAGIC </span>
+          <span className="text-purple-300">MUSHROOMS</span>
+        </h1>
+        <p className="text-base text-white font-medium pixelated tracking-wider">FARM + HARVEST + EARN $SHROOMS</p>
+        <p className="text-sm text-yellow-300 pixelated mt-2">The first psychedelic game on Sui</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-gradient-to-b from-background to-card/50 relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none opacity-20">
-        <div className="absolute top-20 left-10 text-6xl animate-float">🍄</div>
-        <div className="absolute top-40 right-20 text-5xl animate-float" style={{ animationDelay: "1s" }}>
-          🍄
-        </div>
-        <div className="absolute bottom-32 left-1/4 text-7xl animate-float" style={{ animationDelay: "2s" }}>
-          🍄
-        </div>
-        <div className="absolute bottom-20 right-1/3 text-6xl animate-float" style={{ animationDelay: "1.5s" }}>
-          🍄
-        </div>
+    <div className="pt-32 pb-16 text-center">
+      <div className="flex justify-center mb-6">
+        <span className="text-8xl animate-pulse">🍄</span>
+      </div>
+      <h1 className="text-6xl md:text-8xl font-bold pixelated mb-4">
+        <span className="text-emerald-400">GROW MAGIC </span>
+        <span className="text-purple-300">MUSHROOMS</span>
+      </h1>
+      <p className="text-xl text-white font-medium pixelated tracking-wide">FARM + HARVEST + EARN $SHROOMS</p>
+      <p className="text-base text-yellow-300 pixelated mt-3">The first psychedelic game on Sui</p>
+
+      <div className="mt-8 flex justify-center">
+        <WalletConnectButton />
       </div>
 
-      <div className="text-center max-w-4xl relative z-10">
-        <div className="relative inline-block mb-8">
-          <div className="text-[120px] leading-none animate-float drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]">🍄</div>
-          <div className="absolute -top-4 -left-4 text-4xl animate-float" style={{ animationDelay: "0.5s" }}>
-            ✨
-          </div>
-          <div className="absolute -bottom-4 -right-4 text-4xl animate-float" style={{ animationDelay: "1s" }}>
-            ✨
+      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
+        <div className="p-6 border-2 border-emerald-400/50 bg-purple-950/40 backdrop-blur-sm rounded-xl hover:bg-purple-950/60 transition-all">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 bg-emerald-500/80 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+              <span className="text-3xl">🌱</span>
+            </div>
+            <h3 className="font-bold text-xl text-emerald-400 pixelated">1. Create Farm</h3>
+            <p className="text-sm text-purple-100 pixelated leading-relaxed">
+              Pay 10 SUI to create your mushroom farm with 10 starting mushrooms
+            </p>
           </div>
         </div>
-
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-balance leading-tight">
-          <span className="text-primary drop-shadow-[0_2px_8px_rgba(0,255,0,0.5)]">GROW MAGIC</span>
-          <br />
-          <span className="text-secondary drop-shadow-[0_2px_8px_rgba(200,0,255,0.5)]">MUSHROOMS</span>
-        </h2>
-
-        <p className="text-sm sm:text-base text-foreground/90 mb-8 max-w-2xl mx-auto leading-relaxed">
-          FARM • HARVEST • EARN $SHROOMS
-          <br />
-          <span className="text-muted-foreground text-xs">The first psychedelic game on Sui</span>
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-12">
-          <ConnectButton />
+        <div className="p-6 border-2 border-purple-400/50 bg-indigo-950/40 backdrop-blur-sm rounded-xl hover:bg-indigo-950/60 transition-all">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 bg-purple-500/80 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+              <span className="text-3xl">⏰</span>
+            </div>
+            <h3 className="font-bold text-xl text-purple-300 pixelated">2. Wait & Grow</h3>
+            <p className="text-sm text-purple-100 pixelated leading-relaxed">
+              Your mushrooms generate $SHROOMS every epoch based on count and level
+            </p>
+          </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-          <div className="bg-card border-4 border-primary rounded-lg p-6 hover:scale-105 transition-transform relative overflow-hidden">
-            <div className="absolute top-2 right-2 text-2xl">👨‍🌾</div>
-            <div className="text-5xl mb-3">🌱</div>
-            <h3 className="font-bold text-base mb-2 text-primary">PLANT</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">Start farm for 10 SUI</p>
-          </div>
-
-          <div className="bg-card border-4 border-secondary rounded-lg p-6 hover:scale-105 transition-transform relative overflow-hidden">
-            <div className="absolute top-2 right-2 text-2xl">👨‍🌾</div>
-            <div className="text-5xl mb-3">🍄</div>
-            <h3 className="font-bold text-base mb-2 text-secondary">HARVEST</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">Earn $SHROOMS tokens</p>
-          </div>
-
-          <div className="bg-card border-4 border-accent rounded-lg p-6 hover:scale-105 transition-transform relative overflow-hidden">
-            <div className="absolute top-2 right-2 text-2xl">👨‍🌾</div>
-            <div className="text-5xl mb-3">⬆️</div>
-            <h3 className="font-bold text-base mb-2 text-accent">UPGRADE</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">Level up for more yield</p>
+        <div className="p-6 border-2 border-pink-400/50 bg-violet-950/40 backdrop-blur-sm rounded-xl hover:bg-violet-950/60 transition-all">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 bg-pink-500/80 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+              <span className="text-3xl">💰</span>
+            </div>
+            <h3 className="font-bold text-xl text-pink-300 pixelated">3. Harvest</h3>
+            <p className="text-sm text-purple-100 pixelated leading-relaxed">
+              Harvest your accumulated $SHROOMS and upgrade your farm
+            </p>
           </div>
         </div>
       </div>
