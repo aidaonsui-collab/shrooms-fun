@@ -72,6 +72,11 @@ export function ZkLoginButton() {
 
         if (idToken) {
           try {
+            const savedState = ZkLoginManager.loadZkLoginState()
+            if (!savedState) {
+              throw new Error("No saved zkLogin state found. Please try logging in again.")
+            }
+
             const jwtPayload = JSON.parse(atob(idToken.split(".")[1]))
 
             const userSalt = BigInt(
@@ -85,12 +90,9 @@ export function ZkLoginButton() {
             const address = await ZkLoginManager.getAddressFromJWT(idToken, userSalt)
 
             setZkAddress(address)
-            const savedState = ZkLoginManager.loadZkLoginState()
-            if (savedState) {
-              // Update the existing full state with the new address
-              savedState.address = address
-              ZkLoginManager.saveZkLoginState(savedState)
-            }
+
+            savedState.address = address
+            ZkLoginManager.saveZkLoginState(savedState)
 
             toast({
               title: "Login Successful!",
@@ -102,7 +104,7 @@ export function ZkLoginButton() {
             console.error("Failed to process JWT:", error)
             toast({
               title: "Login Failed",
-              description: "Failed to process login credentials",
+              description: error instanceof Error ? error.message : "Failed to process login credentials",
               variant: "destructive",
             })
           }
