@@ -25,8 +25,12 @@ export function Header() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {mounted && <ZkLoginButton />}
-          {mounted && <ConnectButton />}
+          {mounted && (
+            <>
+              <ZkLoginButton />
+              <ConnectButton />
+            </>
+          )}
         </div>
       </div>
     </header>

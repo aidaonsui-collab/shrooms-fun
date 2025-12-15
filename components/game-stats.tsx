@@ -10,9 +10,14 @@ export function GameStats() {
   const [totalYieldReady, setTotalYieldReady] = useState(0)
   const [totalSupply, setTotalSupply] = useState(0)
 
-  const GAME_STATE_ID = process.env.NEXT_PUBLIC_GAME_STATE_ID || ""
+  const GAME_STATE_ID = process.env.NEXT_PUBLIC_GAME_STATE_ID
 
   useEffect(() => {
+    if (!GAME_STATE_ID) {
+      console.warn("[v0] NEXT_PUBLIC_GAME_STATE_ID not set. Please configure it in Vercel environment variables.")
+      return
+    }
+
     const fetchGameStats = async () => {
       try {
         const gameState = await client.getObject({
