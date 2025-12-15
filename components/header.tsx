@@ -2,16 +2,14 @@
 
 import { Sprout } from "lucide-react"
 import { ZkLoginButton } from "@/components/zklogin-button"
-import { ConnectButton } from "@mysten/dapp-kit"
-import { useState, useEffect } from "react"
+import dynamic from "next/dynamic"
+
+const WalletConnectButton = dynamic(
+  () => import("@/components/wallet-connect-button").then((mod) => mod.WalletConnectButton),
+  { ssr: false },
+)
 
 export function Header() {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   return (
     <header className="border-b-4 border-primary bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -26,7 +24,7 @@ export function Header() {
         </div>
         <div className="flex items-center gap-3">
           <ZkLoginButton />
-          {mounted && <ConnectButton />}
+          <WalletConnectButton />
         </div>
       </div>
     </header>
