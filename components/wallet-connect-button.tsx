@@ -11,8 +11,8 @@ export function WalletConnectButton() {
   }, [])
 
   if (!mounted) {
-    return <div className="h-10 w-32" />
+    return <div className="h-10 w-32 opacity-0" />
   }
 
-  return <ConnectButton key="wallet-button-mounted" />
+  return <ConnectButton />
 }
