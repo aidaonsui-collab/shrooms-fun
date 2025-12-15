@@ -81,8 +81,8 @@ export function ZkLoginButton() {
 
             const userSalt = BigInt(
               "0x" +
-                Array.from(jwtPayload.sub)
-                  .map((c) => c.charCodeAt(0).toString(16).padStart(2, "0"))
+                Array.from(jwtPayload.sub as string)
+                  .map((c: string) => c.charCodeAt(0).toString(16).padStart(2, "0"))
                   .join("")
                   .slice(0, 32),
             ).toString()
