@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Press_Start_2P, Inter } from "next/font/google"
+import { Press_Start_2P } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Providers } from "./providers"
 import { ToastProvider } from "@/lib/simple-toast"
@@ -13,20 +13,12 @@ const pressStart = Press_Start_2P({
   display: "block",
 })
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-body",
-})
-
 export const metadata: Metadata = {
   title: "Shrooms.fun - Magic Mushroom Farming on Sui",
   description:
     "Grow magic mushrooms and earn $SHROOMS tokens on Sui blockchain. The first mushroom farming game with real blockchain rewards!",
   generator: "v0.app",
   keywords: ["Sui", "blockchain", "mushroom", "farming", "game", "SHROOMS", "crypto"],
-  icons: {
-    apple: "/apple-icon.png",
-  },
 }
 
 export default function RootLayout({

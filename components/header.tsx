@@ -1,8 +1,8 @@
 "use client"
 
-import { ConnectButton } from "@mysten/dapp-kit"
 import { Sprout } from "lucide-react"
 import { ZkLoginButton } from "@/components/zklogin-button"
+import { ConnectWalletWrapper } from "@/components/connect-wallet-wrapper"
 
 export function Header() {
   return (
@@ -19,7 +19,7 @@ export function Header() {
         </div>
         <div className="flex items-center gap-3">
           <ZkLoginButton />
-          <ConnectButton />
+          <ConnectWalletWrapper />
         </div>
       </div>
     </header>
