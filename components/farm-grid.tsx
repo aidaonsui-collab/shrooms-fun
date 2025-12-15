@@ -5,7 +5,7 @@ import { Transaction } from "@mysten/sui/transactions"
 import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/lib/simple-toast"
 
 interface Farm {
   id: string
@@ -30,6 +30,7 @@ export function FarmGrid() {
 
   const PACKAGE_ID = process.env.NEXT_PUBLIC_PACKAGE_ID || ""
   const GAME_STATE_ID = process.env.NEXT_PUBLIC_GAME_STATE_ID || ""
+  const REFERRAL_SYSTEM_ID = process.env.NEXT_PUBLIC_REFERRAL_SYSTEM_ID || "" // Added referral system ID constant
   const CLOCK_ID = "0x6" // Sui Clock object ID
 
   useEffect(() => {
@@ -130,7 +131,12 @@ export function FarmGrid() {
       const tx = new Transaction()
       tx.moveCall({
         target: `${PACKAGE_ID}::shrooms_token::harvest`,
-        arguments: [tx.object(GAME_STATE_ID), tx.pure.u64(farmId), tx.object(CLOCK_ID)],
+        arguments: [
+          tx.object(GAME_STATE_ID),
+          tx.object(REFERRAL_SYSTEM_ID), // Referral system for reward distribution
+          tx.pure.u64(farmId),
+          tx.object(CLOCK_ID),
+        ],
       })
 
       signAndExecuteTransaction(
@@ -277,7 +283,7 @@ export function FarmGrid() {
                   <Button
                     onClick={() => handleUpgrade(farm.id)}
                     disabled={isUpgrading === farm.id}
-                    className="w-full bg-purple-600 hover:bg-purple-700 pixelated disabled:opacity-50 text-white font-bold py-3 border-2 border-purple-400"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 border-2 border-purple-400"
                   >
                     {isUpgrading === farm.id ? "UPGRADING..." : `⬆️ UPGRADE (5 SUI)`}
                   </Button>

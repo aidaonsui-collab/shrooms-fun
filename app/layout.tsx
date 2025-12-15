@@ -2,8 +2,8 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Press_Start_2P, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import { SuiProvider } from "@/lib/sui-provider"
-import { Toaster } from "@/components/ui/toaster"
+import { Providers } from "./providers"
+import { ToastProvider } from "@/lib/simple-toast"
 import "./globals.css"
 
 const pressStart = Press_Start_2P({
@@ -51,10 +51,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pressStart.className} antialiased`}>
-        <SuiProvider>
-          {children}
-          <Toaster />
-        </SuiProvider>
+        <Providers>
+          <ToastProvider>{children}</ToastProvider>
+        </Providers>
         <Analytics />
       </body>
     </html>

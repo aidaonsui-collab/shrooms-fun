@@ -3,6 +3,7 @@
 import { ConnectButton } from "@mysten/dapp-kit"
 import { Sprout } from "lucide-react"
 import { useState, useEffect } from "react"
+import { ZkLoginButton } from "@/components/zklogin-button"
 
 export function Header() {
   const [mounted, setMounted] = useState(false)
@@ -23,7 +24,10 @@ export function Header() {
             <p className="text-xs text-muted-foreground font-mono">Grow Magic Mushrooms on Sui</p>
           </div>
         </div>
-        {mounted && <ConnectButton />}
+        <div className="flex items-center gap-3">
+          {mounted && <ZkLoginButton />}
+          {mounted && <ConnectButton />}
+        </div>
       </div>
     </header>
   )

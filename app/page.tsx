@@ -6,6 +6,7 @@ import { GameStats } from "@/components/game-stats"
 import { FarmGrid } from "@/components/farm-grid"
 import { HeroSection } from "@/components/hero-section"
 import { DevPanel } from "@/components/dev-panel"
+import { ReferralPanel } from "@/components/referral-panel"
 
 export default function Home() {
   const account = useCurrentAccount()
@@ -24,6 +25,9 @@ export default function Home() {
           <main className="container mx-auto px-4 py-8">
             <DevPanel />
             <GameStats />
+            <div className="mb-8">
+              <ReferralPanel />
+            </div>
             <FarmGrid />
           </main>
         )}
