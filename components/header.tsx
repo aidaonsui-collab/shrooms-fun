@@ -2,7 +2,7 @@
 
 import { Sprout } from "lucide-react"
 import { ZkLoginButton } from "@/components/zklogin-button"
-import { ConnectWalletWrapper } from "@/components/connect-wallet-wrapper"
+import { ConnectButton } from "@mysten/dapp-kit"
 
 export function Header() {
   return (
@@ -17,9 +17,9 @@ export function Header() {
             <p className="text-xs text-muted-foreground font-mono">Grow Magic Mushrooms on Sui</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3" suppressHydrationWarning>
           <ZkLoginButton />
-          <ConnectWalletWrapper />
+          <ConnectButton />
         </div>
       </div>
     </header>
