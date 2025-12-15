@@ -25,20 +25,6 @@ export const metadata: Metadata = {
   generator: "v0.app",
   keywords: ["Sui", "blockchain", "mushroom", "farming", "game", "SHROOMS", "crypto"],
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
     apple: "/apple-icon.png",
   },
 }

@@ -2,16 +2,9 @@
 
 import { ConnectButton } from "@mysten/dapp-kit"
 import { Sprout } from "lucide-react"
-import { useState, useEffect } from "react"
 import { ZkLoginButton } from "@/components/zklogin-button"
 
 export function Header() {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   return (
     <header className="border-b-4 border-primary bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -25,12 +18,8 @@ export function Header() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {mounted && (
-            <>
-              <ZkLoginButton />
-              <ConnectButton />
-            </>
-          )}
+          <ZkLoginButton />
+          <ConnectButton />
         </div>
       </div>
     </header>
