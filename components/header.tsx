@@ -36,7 +36,7 @@ export function Header() {
             <Sprout className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-black text-foreground tracking-tight">SHROOMZ.FUN</h1>
+            <h1 className="text-3xl font-black text-foreground tracking-tight">SHROOMS.FUN</h1>
             <p className="text-xs text-muted-foreground font-mono">Grow Magic Mushrooms on Sui</p>
           </div>
         </div>
