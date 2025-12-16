@@ -5,7 +5,6 @@ import { ZkLoginButton } from "@/components/zklogin-button"
 import dynamic from "next/dynamic"
 import { useState, useEffect } from "react"
 import { ZkLoginManager } from "@/lib/zklogin"
-import { useCurrentAccount } from "@mysten/dapp-kit"
 
 const WalletConnectButton = dynamic(
   () => import("@/components/wallet-connect-button").then((mod) => mod.WalletConnectButton),
@@ -15,15 +14,22 @@ const WalletConnectButton = dynamic(
 export function Header() {
   const [zkLoginActive, setZkLoginActive] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const account = useCurrentAccount()
 
   useEffect(() => {
     setMounted(true)
-    // Check if zkLogin is active on mount
-    const zkState = ZkLoginManager.getZkLoginState()
-    if (zkState?.address) {
-      setZkLoginActive(true)
+
+    const checkZkLoginState = () => {
+      const zkState = ZkLoginManager.getZkLoginState()
+      setZkLoginActive(!!zkState?.address)
     }
+
+    // Initial check
+    checkZkLoginState()
+
+    // Poll every 500ms to detect state changes
+    const interval = setInterval(checkZkLoginState, 500)
+
+    return () => clearInterval(interval)
   }, [])
 
   const showWalletButton = !zkLoginActive
@@ -45,7 +51,7 @@ export function Header() {
             <div className="w-[180px] h-10" />
           ) : (
             <>
-              <ZkLoginButton onLogin={() => setZkLoginActive(true)} onLogout={() => setZkLoginActive(false)} />
+              <ZkLoginButton />
               {showWalletButton && <WalletConnectButton />}
             </>
           )}
